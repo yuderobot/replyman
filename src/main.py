@@ -66,7 +66,7 @@ def gen_msg(status):
                 response = "@{} あなたのツイートは {} 点です＞＜".format(status.user.screen_name, random.randint(0, 100))
     
     if (len(response) > 130):
-        response = response[:130] + "..."
+        response = response[:120] + " ...(省略)"
     return response
 
 # Twitter streaming
