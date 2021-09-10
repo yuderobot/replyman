@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from requests import NullHandler
 import tweepy
 import os
 from os.path import join, dirname
@@ -6,6 +7,8 @@ from dotenv import load_dotenv
 import random
 import numpy as np
 from parse import *
+import git
+
 
 # Import keys from .env
 dotenv_path = join(dirname(__file__), '.env')
@@ -43,7 +46,7 @@ def gen_msg(status):
 
     # Commands
     else:
-        msg = parse('@yuderobot {} {}', status.text)
+        msg = parse('@yuderobot {}', status.text)
         if msg:
             # Dice rolling
             if "dice" in msg[0]:
@@ -55,12 +58,22 @@ def gen_msg(status):
                         m = simple_dice(dice_size, dice_num)
                     response = "@{} {}".format(status.user.screen_name, m)
             
-            # Echo
+            # echo
             elif "echo" in msg[0]:
+                echo = parse('@yuderobot echo {}', status.text)
                 if status.user.screen_name == "@yude_jp" or "@yude_RT":
-                    response = "@{} echo: {}".format(status.user.screen_name, msg[1])
+                    response = "@{} echo: {}".format(status.user.screen_name, echo[0])
                 else:
                     response = "@{} echo: 許可されていないアカウントです。".format(status.user.screen_name)
+            
+            # version
+            elif "ver" in msg[0]:
+                repo = git.Repo(search_parent_directories=True)
+                git_hash = repo.head.object.hexsha
+                if git_hash == None:
+                    git_hash = "N/A"
+                response = "@{} Currently running replyman {} by yude (https://github.com/yuderobot/replyman).".format(status.user.screen_name, git_hash)
+                # response = "@{} Currently running replyman by yude.".format(status.user.screen_name)
             
             else:
                 response = "@{} あなたのツイートは {} 点です＞＜".format(status.user.screen_name, random.randint(0, 100))
