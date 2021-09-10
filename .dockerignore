@@ -1,0 +1,7 @@
+src/.env
+src/.env.sample
+.gitignore
+docker-compose.yml
+Dockerfile
+LICENSE
+README.md
