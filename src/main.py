@@ -73,7 +73,6 @@ def gen_msg(status):
                 if git_hash == None:
                     git_hash = "N/A"
                 response = "@{} Currently running replyman {} by yude (https://github.com/yuderobot/replyman).".format(status.user.screen_name, git_hash)
-                # response = "@{} Currently running replyman by yude.".format(status.user.screen_name)
             
             else:
                 response = "@{} あなたのツイートは {} 点です＞＜".format(status.user.screen_name, random.randint(0, 100))
