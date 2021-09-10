@@ -1,0 +1,12 @@
+version: '3'
+services:
+    replyman:
+        restart: always
+        container_name: replyman
+        image: yude/replyman:latest
+        environment:
+          # Twitter API related
+          - CK=
+          - CS=
+          - AT=
+          - AS=
