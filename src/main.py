@@ -23,7 +23,10 @@ api = tweepy.API(auth)
 class StreamListener(tweepy.StreamListener):
     def on_status(self, status):
         print(status.text)
-        api.update_status("@{} あなたのツイートは {} 点です＞＜".format(status.user.screen_name, random.randint(0, 100)), in_reply_to_status_id=status.id)
+        if "グー" in status.text or "チョキ" in status.text or "パー" in status.text:
+            api.update_status("@{} {}".format(status.user.screen_name, random.choice(("グー", "チョキ", "パー"))), in_reply_to_status_id=status.id)
+        else:
+            api.update_status("@{} あなたのツイートは {} 点です＞＜".format(status.user.screen_name, random.randint(0, 100)), in_reply_to_status_id=status.id)
         return True
 
     def on_error(self, status_code):
