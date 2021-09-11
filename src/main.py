@@ -8,7 +8,8 @@ import random
 import numpy as np
 from parse import *
 import git
-
+import datetime, time
+import re
 
 # Import keys from .env
 dotenv_path = join(dirname(__file__), '.env')
@@ -24,6 +25,10 @@ auth.set_access_token(AT, AS)
 
 # Generate API instance
 api = tweepy.API(auth)
+
+# Initial datetime for uptime command
+global start_time
+start_time = datetime.datetime.utcnow()
 
 # Dice rolling
 def dice(dice_size):
@@ -62,9 +67,9 @@ def gen_msg(status):
             elif "echo" in msg[0]:
                 echo = parse('@yuderobot echo {}', status.text)
                 if status.user.screen_name == "@yude_jp" or "@yude_RT":
-                    response = "@{} echo: {}".format(status.user.screen_name, echo[0])
+                    response = "@{} 📢 echo: {}".format(status.user.screen_name, echo[0])
                 else:
-                    response = "@{} echo: 許可されていないアカウントです。".format(status.user.screen_name)
+                    response = "@{} 📢 echo: 許可されていないアカウントです。".format(status.user.screen_name)
             
             # version
             elif "ver" in msg[0]:
@@ -72,8 +77,25 @@ def gen_msg(status):
                 git_hash = repo.head.object.hexsha
                 if git_hash == None:
                     git_hash = "N/A"
-                response = "@{} Currently running replyman {} by yude (https://github.com/yuderobot/replyman).".format(status.user.screen_name, git_hash)
+                response = "@{} 🤖 replyman {} by yude (https://github.com/yuderobot/replyman).".format(status.user.screen_name, git_hash)
             
+            # uptime
+            elif "uptime" in msg[0]:
+                delta = datetime.datetime.utcnow() - start_time
+                hours, remainder = divmod(int(delta.total_seconds()), 3600)
+                minutes, seconds = divmod(remainder, 60)
+                days, hours = divmod(hours, 24)
+                uptime = ("{} days, {}:{}:{}".format(days, hours, minutes, seconds))
+                response = "@{} ⌚ uptime: {}".format(status.user.screen_name, uptime)
+            
+            # Greetings
+            elif re.compile("(?:こん(?:にち|ばん)(?:は|わ)|や(?:ぁ|あ))").search(msg[0]):
+                response = "@{} こんにちは!".format(status.user.screen_name)
+            elif re.compile("hi|hello", re.IGNORECASE):
+                greetings = random.choice(("Hello, what's up?", "Hi! How is it going?", "Hello, how are you doing?"))
+                response = "@{} {}".format(status.user.screen_name, greetings)
+            
+            # Scoring tweet
             else:
                 response = "@{} あなたのツイートは {} 点です＞＜".format(status.user.screen_name, random.randint(0, 100))
     
