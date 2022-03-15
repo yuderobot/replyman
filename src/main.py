@@ -93,9 +93,14 @@ def gen_msg(status):
             # Greetings
             elif re.compile("(?:こん(?:にち|ばん)(?:は|わ)|や(?:ぁ|あ))").search(msg[0]):
                 response = "@{} こんにちは!".format(status.user.screen_name)
-            elif re.compile("hi|hello", re.IGNORECASE):
+            elif re.compile("hi|hello", re.IGNORECASE).search(msg[0]):
                 greetings = random.choice(("Hello, what's up?", "Hi! How is it going?", "Hello, how are you doing?"))
                 response = "@{} {}".format(status.user.screen_name, greetings)
+            
+            # Rock-paper-scisors
+            elif re.compile("(?:[ぐぱグパ]ー|ちょき|チョキ)").search(msg[0]):
+                result = random.choice(("グー", "チョキ", "パー"))
+                response = "@{} {}".format(status.user.screen_name, result)
             
             # Scoring tweet
             else:
