@@ -62,6 +62,8 @@ def gen_msg(status):
                         dice_size = int(dice[1])
                         m = simple_dice(dice_size, dice_num)
                     response = "@{} {}".format(status.user.screen_name, m)
+                else:
+                    response = "@{} 🎲 dice: 「dice 2d100」のようにリプライしてください。".format(status.user.screen_name)
             
             # echo
             elif "echo" in msg[0]:
