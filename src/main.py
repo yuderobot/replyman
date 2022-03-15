@@ -12,6 +12,7 @@ from dice import simple_dice
 from uptime import get_uptime
 from git_hash import get_hash
 from wol import issue_wol
+import platform
 
 # Import keys from .env
 dotenv_path = join(dirname(__file__), '.env')
@@ -69,7 +70,7 @@ def gen_msg(status):
         
         # version
         elif "ver" in msg[0]:
-            response = "@{} 🤖 replyman {} by yude (https://github.com/yuderobot/replyman).".format(status.user.screen_name, get_hash())
+            response = "@{} 🤖 replyman (https://github.com/yuderobot/replyman {}), サーバー: {}".format(status.user.screen_name, get_hash(), platform.platform())
         
         # uptime
         elif "uptime" in msg[0]:
