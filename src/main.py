@@ -11,6 +11,7 @@ import re
 from dice import simple_dice
 from uptime import get_uptime
 from git_hash import get_hash
+from wol import issue_wol
 
 # Import keys from .env
 dotenv_path = join(dirname(__file__), '.env')
@@ -45,13 +46,26 @@ def gen_msg(status):
             else:
                 response = "@{} 🎲 dice: 「dice 2d100」のようにリプライしてください。".format(status.user.screen_name)
         
+        # Wake on LAN
+        if "wol" in msg[0]:
+            if status.user.screen_name == "@yude_jp" or status.user.screen_name == "@yude_RT":
+                msg = parse('@yuderobot wol {}', status.text)
+                if msg:
+                    result = issue_wol(msg[0])
+                    if result == True:
+                        response = "@{} 🌝 WoL: {} にマジックパケットを送信しました。".format(status.user.screen_name, msg[0])
+                    else:
+                        response = "@{} 🌝 WoL: {} というホストは登録されていません。".format(status.user.screen_name, msg[0])
+            else:
+                response = "@{} 🌝 WoL: コマンドの実行が許可されていないアカウントです。".format(status.user.screen_name)
+        
         # echo
         elif "echo" in msg[0]:
             echo = parse('@yuderobot echo {}', status.text)
             if status.user.screen_name == "@yude_jp" or "@yude_RT":
                 response = "@{} 📢 echo: {}".format(status.user.screen_name, echo[0])
             else:
-                response = "@{} 📢 echo: 許可されていないアカウントです。".format(status.user.screen_name)
+                response = "@{} 📢 echo: コマンドの実行が許可されていないアカウントです。".format(status.user.screen_name)
         
         # version
         elif "ver" in msg[0]:
