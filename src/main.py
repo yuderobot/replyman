@@ -70,7 +70,7 @@ def gen_msg(status):
         
         # version
         elif "ver" in msg[0]:
-            response = "@{} 🤖 replyman (https://github.com/yuderobot/replyman {}), サーバー: {}".format(status.user.screen_name, get_hash(), platform.platform())
+            response = "@{} 🤖 replyman (https://github.com/yuderobot/replyman {}) を実行中です。サーバー: {}".format(status.user.screen_name, get_hash(), platform.platform())
         
         # uptime
         elif "uptime" in msg[0]:
