@@ -112,6 +112,9 @@ class StreamListener(tweepy.StreamListener):
         if "@yuderobot" in reply_msg:
             pass
             print("[Info] This tweet contains reply to yuderobot, skipped.")
+        elif "RT" in status.text:
+            pass
+            print("[Info] This tweet is retweet, skipped.")
         else:
             api.update_status(reply_msg, in_reply_to_status_id=status.id)
             print("[Info] Sent tweet: {}".format(reply_msg))
