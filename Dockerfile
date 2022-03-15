@@ -15,7 +15,7 @@ FROM python:3.9.10-alpine3.15 AS runner
 # Copy dependencies from builder / Install dependency
 COPY --from=builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
-RUN apk add py3-numpy 
+RUN apk add py3-numpy git
 
 # Copy app from host
 ADD ./ /app
